@@ -1,0 +1,37 @@
+<html>
+<body>
+<label>Textbox1</label></br>
+<textarea id="text1" name="text1" rows="5" cols="20">
+</textarea></br>
+<label>Textbox2</label></br>
+<textarea id="text2" name="text2" rows="5" cols="20">
+</textarea></br>
+<button onclick="getValue()">Submit</button>
+<div id="output" ></div>
+</body>
+<script>
+    function getValue() {
+        var para = document.getElementById("text1").value; 
+        var values = document.getElementById("text2").value;
+        console.log(para);
+        console.log(values);
+        const xhr = new XMLHttpRequest();
+        xhr.onload = () => {
+            if(xhr.status >= 200 && xhr.status < 300) {
+                const response = JSON.parse(xhr.responseText);
+                console.log(response);
+                document.getElementById("output").innerHTML = JSON.stringify(response);
+            }
+        };
+        var body = {
+            "para" : para,
+            "values" : values
+        };
+        console.log(JSON.stringify(body));
+        xhr.open('POST', 'http://localhost:3000/update');
+        xhr.setRequestHeader('Content-Type' , 'application/json');
+        xhr.send(JSON.stringify(body));
+        
+}
+</script>
+</html>
