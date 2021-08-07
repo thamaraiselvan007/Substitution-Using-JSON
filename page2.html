@@ -1,0 +1,62 @@
+<html>
+<body>
+<label>Textbox1</label></br>
+<textarea id="text1" name="text1" rows="5" cols="20">
+</textarea></br>
+<label>Textbox2</label></br>
+<textarea id="text2" name="text2" rows="5" cols="20">
+</textarea></br>
+<button onclick="getValue()">Submit</button>
+<div id="output" ></div>
+</body>
+<script>
+    function extract(data) {
+    var people = [];
+    var values = data["values"].split("\n");
+    var para = data["para"];
+    var key_value_pair;
+    var person = {};
+    for (line of values) {
+      if (line.trim().length == 0) {
+        people.push(person);
+        person = {};
+      }
+      else {
+        key_value_pair = line.split(" ");
+        var right = "";
+        for (var i=1; i<key_value_pair.length; i++) {
+          right += " "+key_value_pair[i];
+        }
+        person[key_value_pair[0]] = right.trim();
+      }
+    }
+    if (Object.keys(person).length > 0) {
+      people.push(person);
+    }
+    var result = [];
+    for (person of people) {
+      var para_with_person = para;
+      for (key of Object.keys(person)) {
+        para_with_person = para_with_person.replace("#"+key, person[key]);
+      }
+      result.push(para_with_person);
+    }
+          return result;
+  }
+    function getValue() {
+        var para = document.getElementById("text1").value; 
+        var values = document.getElementById("text2").value;
+        var data = {"para" : para, 
+               "values" : values
+               };
+        var result = extract(data);
+        console.log(result);
+        var output = "";
+        for (person of result)
+        {
+            output += person + "<br>";
+        }
+        document.getElementById("output").innerHTML = output;
+}
+</script>
+</html>
